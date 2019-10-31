@@ -1,2 +1,2 @@
 # extract-feed-bot
-Slack bot for extraction feed from feedly
+A bot for slack to get feeds by condition.
