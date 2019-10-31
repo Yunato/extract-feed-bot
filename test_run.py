@@ -10,7 +10,7 @@ class TestGetFeeds(unittest.TestCase):
         
     def test_getFeeds_with_wrongURL(self):
         RSS_URL = ''
-        with self.assertRaises(NameError):
+        with self.assertRaises(ValueError):
             actual = getFeeds(RSS_URL)
 
 
