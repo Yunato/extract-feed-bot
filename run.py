@@ -1,18 +1,20 @@
 import feedparser
 from slackbot.bot import Bot
 
-def getFeed(rss_url):
-    for entry in feedparser.parse(rss_url).entries:
+def getFeeds(rss_url):
+    entries = feedparser.parse(rss_url).entries
+    for entry in entries:
         print(entry.title)
         print(entry.link)
         print(entry.category)
         print('----')
+    return entries
     
 
 def main():
     # bot = Bot()
     # bot.run()
-    getFeed(RSS_URL)
+    getFeeds(RSS_URL)
 
 if __name__ == "__main__":
     main()
