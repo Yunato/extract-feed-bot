@@ -1,9 +1,17 @@
 language: python
 python:
-  - "3.7"
+  - '3.7'
 
 install:
   - pip install -r requirements.txt
 
 script:
   - python -m unittest discover
+
+deploy:
+  provider: heroku
+  api_key:
+    secure: CBr/9CR0eiggiQ1YS2PoqHrL0wTYh/r4yA7PZIKFhaOh/lzccH4uhcyzHI9UCmND+nFSWYeWjZucHgVSizGNwTh080/CSVM5Cty5w6BlQihT9CHLsjGxF6LmkAaINF+5TOpuQtSk5PT4MeFtFrAbAbMOgATBZuF3QWW/csOfVUOAsiy2n4W1LcKCtEhidqCze2VUwqW5reXNTeOVd1gqxseAD1HE47yN6CqPLs8Z92iqDdSD+kNwUrh8pYT908QIlk0iQAoomdnAoNETdBLYXNPi4uGYyipzPBEGU0QRgd/akgdRJJzpTOPSQia5gjRiDPxrm/PvSKJU++codKv0CEBnNG+m4AcwtzQz44cWj9nYMo/oAzJ+FqZb8lwfqFkzEikpA+x98n88y4gO/Qr5EfRQ4hHatkJEjpftdO6GeNeq0f5qjTQRNDm3ezZWNnRyWW3DItS5hJ0xY5mpVsXymYrwljAJpBCGCJvybFFI0YMiHQb+JVqd+Tw0Vsznq8PwlfgnMKtsew0zKJ0EDJITqT/74fu/Rh35+mK7jPhMTiynKgXq1TUD/h0bajU9F5gxm1twgtiFfYqNNg8qFL61USvbl+tclOIkHv1E4Y3fxaEtXwKrJy/oGppbJCapypWTzAwYSYiZ2PqIJuK4edLCXnVX+k6TfTT2MfAAMfNNcgo=
+  app: extract-feed-bot
+  on:
+    repo: Yunato/extract-feed-bot
