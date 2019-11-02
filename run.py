@@ -1,7 +1,8 @@
 import feedparser
+import dao
 from slackbot.bot import Bot
 
-RSS_URL = ""
+RSS_URL = "example.com"
 
 def getFeeds(rss_url):
     if not rss_url:
@@ -19,6 +20,7 @@ def main():
     # bot = Bot()
     # bot.run()
     getFeeds(RSS_URL)
+    dao.get_connection()
 
 if __name__ == "__main__":
     main()
