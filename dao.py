@@ -2,7 +2,54 @@ import psycopg2
 import urllib.parse as urlparse
 import os
 
-def get_connection():
-    url = os.environ.get('DATABASE_URL')
-    return psycopg2.connect(url)
+class Dao:
+
+    TABLE_INFO = [
+            {"name": "urls",        "param":  "url"},
+            {"name": "keywords",    "param":  "keyword"}
+            ]
+
+    def __init__(self):
+        self.__con = self.__get_connection()
+        for info in Dao.TABLE_INFO:
+            if not self.__has_table(table_name=info["name"]):
+                self.__create_table(table_info=info)
+        
+    @classmethod
+    def __get_connection(self):
+        url = os.environ.get("DATABASE_URL")
+        return psycopg2.connect(url)
+
+    def __has_table(self, table_name):
+        with self.__con.cursor() as cur:
+            cur.execute("SELECT * FROM information_schema.columns WHERE table_name = %s;", (table_name,))
+            rtn = bool(cur.rowcount)
+        return rtn
+
+    def __create_table(self, table_info):
+        table_name = table_info["name"]
+        table_param = table_info["param"]
+        with self.__con.cursor() as cur:
+            cur.execute(f"CREATE TABLE {table_name} (id serial PRIMARY KEY, {table_param} varchar);")
+
+    def add_url(self, url):
+        info = Dao.TABLE_INFO[0]
+        table_name = info["name"]
+        table_param = info["param"]
+        with self.__con.cursor() as cur:
+            cur.execute("INSERT INTO %s (%s) VALUES (%s);", (table_name, table_param, url,))
+
+    def get_urls(self):
+        info = Dao.TABLE_INFO[0]
+        table_name = info["name"]
+        with self.__con.cursor() as cur:
+            cur.execute("SELECT * FROM %s;", table_name)
+            rtn = cur.fetchall()
+        return rtn
+
+    def get_count(self, table_name):
+        with self.__con.cursor() as cur:
+            cur.execute("SELECT * FROM information_schema.columns WHERE table_name = %s;", (table_name,))
+            rtn = cur.rowcount
+        return rtn
 

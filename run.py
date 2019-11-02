@@ -1,10 +1,10 @@
 import feedparser
-import dao
+from dao import Dao
 from slackbot.bot import Bot
 
 RSS_URL = "example.com"
 
-def getFeeds(rss_url):
+def get_feeds(rss_url):
     if not rss_url:
         raise ValueError("The argument is empty")
     entries = feedparser.parse(rss_url).entries
@@ -19,8 +19,7 @@ def getFeeds(rss_url):
 def main():
     # bot = Bot()
     # bot.run()
-    getFeeds(RSS_URL)
-    dao.get_connection()
+    get_feeds(RSS_URL)
 
 if __name__ == "__main__":
     main()
