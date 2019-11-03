@@ -32,12 +32,18 @@ class Dao:
         with self.__con.cursor() as cur:
             cur.execute(f"CREATE TABLE {table_name} (id serial PRIMARY KEY, {table_param} varchar);")
 
+    def get_count(self, table_name):
+        with self.__con.cursor() as cur:
+            cur.execute(f"SELECT * FROM {table_name};")
+            rtn = cur.rowcount
+        return rtn
+
     def add_url(self, url):
         info = Dao.TABLE_INFO[0]
         table_name = info["name"]
         table_param = info["param"]
         with self.__con.cursor() as cur:
-            cur.execute("INSERT INTO %s (%s) VALUES (%s);", (table_name, table_param, url,))
+            cur.execute(f"INSERT INTO {table_name} ({table_param}) VALUES (%s);", (url,))
 
     def get_urls(self):
         info = Dao.TABLE_INFO[0]
@@ -45,11 +51,5 @@ class Dao:
         with self.__con.cursor() as cur:
             cur.execute("SELECT * FROM %s;", table_name)
             rtn = cur.fetchall()
-        return rtn
-
-    def get_count(self, table_name):
-        with self.__con.cursor() as cur:
-            cur.execute("SELECT * FROM information_schema.columns WHERE table_name = %s;", (table_name,))
-            rtn = cur.rowcount
         return rtn
 
