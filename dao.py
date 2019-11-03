@@ -5,16 +5,16 @@ import os
 class Dao:
 
     TABLE_INFO = [
-            {"name": "urls",        "param":  "url"},
-            {"name": "keywords",    "param":  "keyword"}
-            ]
-
-    def __init__(self):
-        self.__con = self.__get_connection()
-        for info in Dao.TABLE_INFO:
-            if not self.__has_table(table_name=info["name"]):
-                self.__create_table(table_info=info)
+            {"name": "urls",        "param":  "url"}, 
+            {"name": "keywords",    "param":  "keyword"} 
+            ] 
         
+    def __init__(self):	
+        self.__con = self.__get_connection()	
+        for info in Dao.TABLE_INFO:	
+            if not self.__has_table(table_name=info["name"]):	
+                self.__create_table(table_info=info)
+
     @classmethod
     def __get_connection(self):
         url = os.environ.get("DATABASE_URL")
@@ -32,7 +32,7 @@ class Dao:
         with self.__con.cursor() as cur:
             cur.execute(f"CREATE TABLE {table_name} (id serial PRIMARY KEY, {table_param} varchar);")
 
-    def __get_count(self, table_name):
+    def get_count(self, table_name):
         with self.__con.cursor() as cur:
             cur.execute(f"SELECT * FROM {table_name};")
             rtn = cur.rowcount
@@ -53,8 +53,32 @@ class Dao:
             cur.execute(f"INSERT INTO {table_name} ({table_param}) VALUES (%s);", (keyword,))
 
     def get_urls(self):
-        return self.__get_count(Dao.TABLE_INFO[0]["name"])
+        info = Dao.TABLE_INFO[0]
+        table_name = info["name"]
+        with self.__con.cursor() as cur:
+            cur.execute(f"SELECT * FROM {table_name};")
+            rtn = cur.fetchall()
+        return rtn
 
     def get_keywords(self):
-        return self.__get_count(Dao.TABLE_INFO[1]["name"])
+        info = Dao.TABLE_INFO[1]
+        table_name = info["name"]
+        with self.__con.cursor() as cur:
+            cur.execute(f"SELECT * FROM {table_name};")
+            rtn = cur.fetchall()
+        return rtn
+
+    def delete_url(self, index):
+        info = Dao.TABLE_INFO[0]
+        table_name = info["name"]
+        count = 0
+        with self.__con.cursor() as cur:
+            cur.execute(f"SELECT * FROM {table_name} WHERE id = %s;", (index,))
+            count = cur.rowcount
+        if count == 0:
+            return False
+        with self.__con.cursor() as cur:
+            cur.execute(f"DELETE FROM {table_name} WHERE id = {index};")
+            return True
+
 
