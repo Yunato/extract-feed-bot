@@ -68,9 +68,7 @@ class Dao:
             rtn = cur.fetchall()
         return rtn
 
-    def delete_url(self, index):
-        info = Dao.TABLE_INFO[0]
-        table_name = info["name"]
+    def __delete(self, table_name, index):
         count = 0
         with self.__con.cursor() as cur:
             cur.execute(f"SELECT * FROM {table_name} WHERE id = %s;", (index,))
@@ -81,4 +79,13 @@ class Dao:
             cur.execute(f"DELETE FROM {table_name} WHERE id = {index};")
             return True
 
+    def delete_url(self, index):
+        info = Dao.TABLE_INFO[0]
+        table_name = info["name"]
+        return self.__delete(table_name, index)
+
+    def delete_keyword(self, index):
+        info = Dao.TABLE_INFO[1]
+        table_name = info["name"]
+        return self.__delete(table_name, index)
 

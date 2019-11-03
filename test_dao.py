@@ -25,6 +25,9 @@ class TestDao(unittest.TestCase):
     def test_delete_url(self):
         self.assertFalse(self.dao.delete_url(0))
 
+    def test_delete_url(self):
+        self.assertFalse(self.dao.delete_keyword(0))
+
 
 if __name__ == '__main__':
     unittest.main()
