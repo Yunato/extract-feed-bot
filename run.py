@@ -1,5 +1,5 @@
 import feedparser
-from dao import Dao
+from feed_param_dao import FeedParamDao
 from slackbot.bot import Bot
 
 RSS_URL = "example.com"

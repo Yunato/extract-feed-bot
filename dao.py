@@ -3,25 +3,19 @@ import urllib.parse as urlparse
 import os
 
 class Dao:
-
-    TABLE_INFO = [
-            {"name": "urls",        "param":  "url"}, 
-            {"name": "keywords",    "param":  "keyword"} 
-            ] 
         
-    def __init__(self):	
-        self.__con = self.__get_connection()	
-        for info in Dao.TABLE_INFO:	
+    def __init__(self, table_info):	
+        self._con = self.__get_connection()	
+        for info in table_info:	
             if not self.__has_table(table_name=info["name"]):	
                 self.__create_table(table_info=info)
 
-    @classmethod
     def __get_connection(self):
         url = os.environ.get("DATABASE_URL")
         return psycopg2.connect(url)
 
     def __has_table(self, table_name):
-        with self.__con.cursor() as cur:
+        with self._con.cursor() as cur:
             cur.execute("SELECT * FROM information_schema.columns WHERE table_name = %s;", (table_name,))
             rtn = bool(cur.rowcount)
         return rtn
@@ -29,63 +23,23 @@ class Dao:
     def __create_table(self, table_info):
         table_name = table_info["name"]
         table_param = table_info["param"]
-        with self.__con.cursor() as cur:
+        with self._con.cursor() as cur:
             cur.execute(f"CREATE TABLE {table_name} (id serial PRIMARY KEY, {table_param} varchar);")
 
-    def get_count(self, table_name):
-        with self.__con.cursor() as cur:
+    def _get_count(self, table_name):
+        with self._con.cursor() as cur:
             cur.execute(f"SELECT * FROM {table_name};")
             rtn = cur.rowcount
         return rtn
 
-    def add_url(self, url):
-        info = Dao.TABLE_INFO[0]
-        table_name = info["name"]
-        table_param = info["param"]
-        with self.__con.cursor() as cur:
-            cur.execute(f"INSERT INTO {table_name} ({table_param}) VALUES (%s);", (url,))
-
-    def add_keyword(self, keyword):
-        info = Dao.TABLE_INFO[1]
-        table_name = info["name"]
-        table_param = info["param"]
-        with self.__con.cursor() as cur:
-            cur.execute(f"INSERT INTO {table_name} ({table_param}) VALUES (%s);", (keyword,))
-
-    def get_urls(self):
-        info = Dao.TABLE_INFO[0]
-        table_name = info["name"]
-        with self.__con.cursor() as cur:
-            cur.execute(f"SELECT * FROM {table_name};")
-            rtn = cur.fetchall()
-        return rtn
-
-    def get_keywords(self):
-        info = Dao.TABLE_INFO[1]
-        table_name = info["name"]
-        with self.__con.cursor() as cur:
-            cur.execute(f"SELECT * FROM {table_name};")
-            rtn = cur.fetchall()
-        return rtn
-
-    def __delete(self, table_name, index):
+    def _delete(self, table_name, index):
         count = 0
-        with self.__con.cursor() as cur:
+        with self._con.cursor() as cur:
             cur.execute(f"SELECT * FROM {table_name} WHERE id = %s;", (index,))
             count = cur.rowcount
         if count == 0:
             return False
-        with self.__con.cursor() as cur:
+        with self._con.cursor() as cur:
             cur.execute(f"DELETE FROM {table_name} WHERE id = {index};")
             return True
-
-    def delete_url(self, index):
-        info = Dao.TABLE_INFO[0]
-        table_name = info["name"]
-        return self.__delete(table_name, index)
-
-    def delete_keyword(self, index):
-        info = Dao.TABLE_INFO[1]
-        table_name = info["name"]
-        return self.__delete(table_name, index)
 
