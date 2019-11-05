@@ -6,6 +6,13 @@ class Dao:
         
     def __init__(self, table_info):	
         self._con = self.__get_connection()	
+        if type(table_info) is not list and type(table_info) is not dict:
+            raise TypeError(f"The argument's type must be list or dict: {type(table_info)}")
+        if type(table_info) is list and type(table_info[0]) is not dict:
+            raise TypeError(f"The element's type in list must be dict: {type(table_info[0])}")
+        if type(table_info) is dict:
+            tmp = table_info
+            table_info = [tmp]
         for info in table_info:	
             if not self.__has_table(table_name=info["name"]):	
                 self.__create_table(table_info=info)
