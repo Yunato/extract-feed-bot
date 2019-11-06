@@ -6,7 +6,7 @@ RSS_URL = "example.com"
 
 def get_feeds(rss_url):
     if not rss_url:
-        raise ValueError("The argument is empty")
+        raise ValueError("The argument must be not empty")
     entries = feedparser.parse(rss_url).entries
     for entry in entries:
         print(entry.title)
