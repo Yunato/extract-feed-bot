@@ -33,6 +33,8 @@ class Dao:
         for key in table_info:
             if key == "name":
                 continue
+            if len(query_param) != 0:
+                query_param += ","
             query_param += f" {table_info[key]} varchar"
         with self._con.cursor() as cur:
             cur.execute(f"CREATE TABLE {table_name} (id serial PRIMARY KEY, {query_param});")
