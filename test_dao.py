@@ -7,7 +7,11 @@ class TestFeedParamDao(unittest.TestCase):
         self.assertIsNotNone(Dao([{"name": "table_name", "param": "table_param"}]))
 
     def test_init_with_dict(self):
-        self.assertIsNotNone(Dao({"name": "table_name", "param": "table_param"}))
+        args = {"name": "table_name", "param": "table_param"}
+        self.dao = Dao(args)
+        self.assertIsNotNone(self.dao)
+        colnames = self.dao.get_column_names(args["name"])
+        self.assertTrue(args["param"] in colnames)
 
     def test_init_with_int(self):
         with self.assertRaises(TypeError):

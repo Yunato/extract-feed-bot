@@ -29,9 +29,13 @@ class Dao:
 
     def __create_table(self, table_info):
         table_name = table_info["name"]
-        table_param = table_info["param"]
+        query_param = ""
+        for key in table_info:
+            if key == "name":
+                continue
+            query_param += f" {table_info[key]} varchar"
         with self._con.cursor() as cur:
-            cur.execute(f"CREATE TABLE {table_name} (id serial PRIMARY KEY, {table_param} varchar);")
+            cur.execute(f"CREATE TABLE {table_name} (id serial PRIMARY KEY, {query_param});")
 
     def _get_count(self, table_name):
         with self._con.cursor() as cur:
@@ -49,4 +53,9 @@ class Dao:
         with self._con.cursor() as cur:
             cur.execute(f"DELETE FROM {table_name} WHERE id = {index};")
             return True
+
+    def get_column_names(self, table_name):
+        with self._con.cursor() as cur:
+            cur.execute(f"SELECT * FROM {table_name}")
+            return [col.name for col in cur.description]
 
