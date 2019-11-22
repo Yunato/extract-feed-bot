@@ -3,7 +3,7 @@ import datetime
 import urllib.parse as urlparse
 import os
 
-from dao import Dao
+from bot.dao import Dao
 
 class LogDao(Dao):
 

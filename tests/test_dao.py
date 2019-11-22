@@ -1,5 +1,5 @@
 import unittest
-from dao import Dao
+from bot.dao import Dao
 
 class TestFeedParamDao(unittest.TestCase):
 

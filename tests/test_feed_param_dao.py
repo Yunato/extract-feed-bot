@@ -1,5 +1,5 @@
 import unittest
-from feed_param_dao import FeedParamDao
+from bot.feed_param_dao import FeedParamDao
 
 class TestFeedParamDao(unittest.TestCase):
 

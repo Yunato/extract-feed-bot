@@ -1,5 +1,5 @@
 import unittest
-from log_dao import LogDao
+from bot.log_dao import LogDao
 
 class TestLogDao(unittest.TestCase):
 

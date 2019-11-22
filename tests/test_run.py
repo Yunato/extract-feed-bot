@@ -1,5 +1,5 @@
 import unittest
-from run import get_feeds
+from bot.run import get_feeds
 
 class TestGetFeeds(unittest.TestCase):
 
