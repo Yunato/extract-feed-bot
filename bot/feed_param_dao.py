@@ -2,7 +2,7 @@ import psycopg2
 import urllib.parse as urlparse
 import os
 
-from dao import Dao
+from bot.dao import Dao
 
 class FeedParamDao(Dao):
 
