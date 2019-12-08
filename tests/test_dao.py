@@ -1,7 +1,7 @@
 import unittest
 from bot.dao import Dao
 
-class TestFeedParamDao(unittest.TestCase):
+class TestDao(unittest.TestCase):
 
     def test_init_with_list(self):
         self.assertIsNotNone(Dao([{"name": "table_name", "param": "table_param"}]))
@@ -12,6 +12,7 @@ class TestFeedParamDao(unittest.TestCase):
         self.assertIsNotNone(self.dao)
         colnames = self.dao.get_column_names(args["name"])
         self.assertTrue(args["param"] in colnames)
+        self.assertEqual(len(colnames), 2)
 
     def test_init_with_int(self):
         with self.assertRaises(TypeError):

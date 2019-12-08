@@ -17,12 +17,12 @@ class TestLogDao(unittest.TestCase):
             self.assertTrue("0" in log)
 
     def test_insert_delete_action(self):
-        self.dao.insert_delete_action(self.user)
+        self.dao.insert_delete_action(self.user, 10)
         logs = self.dao.get_logs()
         for log in logs:
             self.assertTrue(self.user in log)
             self.assertTrue(LogDao.ACTION[1] in log)
-            self.assertTrue("0" in log)
+            self.assertTrue("10" in log)
 
     def test_insert_list_action(self):
         self.dao.insert_list_action(self.user)

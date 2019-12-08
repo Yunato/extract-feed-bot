@@ -24,8 +24,10 @@ class LogDao(Dao):
     def insert_add_action(self, user):
         self.__insert_action(user, LogDao.ACTION[0], 0)
 
-    def insert_delete_action(self, user):
-        self.__insert_action(user, LogDao.ACTION[1], 0)
+    def insert_delete_action(self, user, count):
+        if count < 0:
+            raise ValueError("Second argument must be larger than 0.")
+        self.__insert_action(user, LogDao.ACTION[1], count)
 
     def insert_list_action(self, user):
         self.__insert_action(user, LogDao.ACTION[2], 0)
