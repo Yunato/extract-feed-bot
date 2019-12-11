@@ -26,8 +26,8 @@ class TestFeedParamDao(unittest.TestCase):
         self.dao.add_keyword("android")
         self.assertEqual(self.dao.get_count(FeedParamDao.TABLE_INFO[1]["name"]), 2)
 
-    def test_delete_url(self):
-        self.assertFalse(self.dao.delete_url(0))
+    def test_delete_url_with_index(self):
+        self.assertFalse(self.dao.delete_url_with_index(0))
 
         self.assertEqual(self.dao.get_count(FeedParamDao.TABLE_INFO[0]["name"]), 0)
         self.dao.add_url("https://gigazine.net/index.php?/news/rss_2.0/")
@@ -35,12 +35,15 @@ class TestFeedParamDao(unittest.TestCase):
         self.dao.add_url(url)
         self.assertEqual(self.dao.get_count(FeedParamDao.TABLE_INFO[0]["name"]), 2)
 
-        self.assertTrue(self.dao.delete_url(0))
+        self.assertTrue(self.dao.delete_url_with_index(0))
         self.assertEqual(self.dao.get_count(FeedParamDao.TABLE_INFO[0]["name"]), 1)
         self.assertTrue(url in self.dao.get_urls()[0])
 
-    def test_delete_keyword(self):
-        self.assertFalse(self.dao.delete_keyword(0))
+        self.assertTrue(self.dao.delete_url_with_param(url))
+        self.assertEqual(self.dao.get_count(FeedParamDao.TABLE_INFO[0]["name"]), 0)
+
+    def test_delete_keyword_with_index(self):
+        self.assertFalse(self.dao.delete_keyword_with_index(0))
 
         self.assertEqual(self.dao.get_count(FeedParamDao.TABLE_INFO[1]["name"]), 0)
         self.dao.add_keyword("android")
@@ -48,9 +51,12 @@ class TestFeedParamDao(unittest.TestCase):
         self.dao.add_keyword(keyword)
         self.assertEqual(self.dao.get_count(FeedParamDao.TABLE_INFO[1]["name"]), 2)
 
-        self.assertTrue(self.dao.delete_keyword(0))
+        self.assertTrue(self.dao.delete_keyword_with_index(0))
         self.assertEqual(self.dao.get_count(FeedParamDao.TABLE_INFO[1]["name"]), 1)
         self.assertTrue(keyword in self.dao.get_keywords()[0])
+
+        self.assertTrue(self.dao.delete_keyword_with_param(keyword))
+        self.assertEqual(self.dao.get_count(FeedParamDao.TABLE_INFO[1]["name"]), 0)
 
 
 if __name__ == '__main__':

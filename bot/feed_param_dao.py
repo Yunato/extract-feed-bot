@@ -57,12 +57,26 @@ class FeedParamDao(Dao):
             rtn = cur.fetchall()
         return rtn
 
-    def delete_url(self, index):
+    def delete_url_with_param(self, url):
+        urls = self.get_urls()
+        for index in range(len(urls)):
+            if (url in urls[index]):
+                return self.delete_url_with_index(index)
+        return False
+
+    def delete_keyword_with_param(self, keyword):
+        keywords = self.get_keywords()
+        for index in range(len(keywords)):
+            if (keyword in keywords[index]):
+                return self.delete_keyword_with_index(index)
+        return False
+
+    def delete_url_with_index(self, index):
         info = FeedParamDao.TABLE_INFO[0]
         table_name = info["name"]
         return super()._delete(table_name, index)
 
-    def delete_keyword(self, index):
+    def delete_keyword_with_index(self, index):
         info = FeedParamDao.TABLE_INFO[1]
         table_name = info["name"]
         return super()._delete(table_name, index)
