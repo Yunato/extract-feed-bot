@@ -31,8 +31,7 @@ class TestFeedParamDao(unittest.TestCase):
         self.dao.add_url(url)
         self.assertEqual(self.dao.get_count(FeedParamDao.TABLE_INFO[0]["name"]), 2)
         
-        index = self.dao.get_urls()[0][0]
-        self.assertTrue(self.dao.delete_url(index))
+        self.assertTrue(self.dao.delete_url(0))
         self.assertEqual(self.dao.get_count(FeedParamDao.TABLE_INFO[0]["name"]), 1)
         self.assertEqual(self.dao.get_urls()[0][1], url)
 
@@ -45,8 +44,7 @@ class TestFeedParamDao(unittest.TestCase):
         self.dao.add_keyword(keyword)
         self.assertEqual(self.dao.get_count(FeedParamDao.TABLE_INFO[1]["name"]), 2)
 
-        index = self.dao.get_keywords()[0][0]
-        self.assertTrue(self.dao.delete_keyword(index))
+        self.assertTrue(self.dao.delete_keyword(0))
         self.assertEqual(self.dao.get_count(FeedParamDao.TABLE_INFO[1]["name"]), 1)
         self.assertEqual(self.dao.get_keywords()[0][1], keyword)
 

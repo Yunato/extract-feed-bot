@@ -46,14 +46,15 @@ class Dao:
         return rtn
 
     def _delete(self, table_name, index):
-        count = 0
+        rows = []
         with self._con.cursor() as cur:
-            cur.execute(f"SELECT * FROM {table_name} WHERE id = %s;", (index,))
-            count = cur.rowcount
-        if count == 0:
+            cur.execute(f"SELECT * FROM {table_name};")
+            rows = cur.fetchall()
+        if len(rows) <= index:
             return False
+        row_id = rows[0][0]
         with self._con.cursor() as cur:
-            cur.execute(f"DELETE FROM {table_name} WHERE id = {index};")
+            cur.execute(f"DELETE FROM {table_name} WHERE id = {row_id};")
             return True
 
     def get_column_names(self, table_name):
