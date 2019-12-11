@@ -18,6 +18,10 @@ class FeedParamDao(Dao):
         return super()._get_count(table_name)
 
     def add_url(self, url):
+        urls = self.get_urls()
+        for saved_url in urls:
+            if (url in saved_url):
+                return
         info = FeedParamDao.TABLE_INFO[0]
         table_name = info["name"]
         table_param = info["param"]
@@ -25,6 +29,10 @@ class FeedParamDao(Dao):
             cur.execute(f"INSERT INTO {table_name} ({table_param}) VALUES (%s);", (url,))
 
     def add_keyword(self, keyword):
+        keywords = self.get_keywords()
+        for saved_keyword in keywords:
+            if (keyword in saved_keyword):
+                return
         info = FeedParamDao.TABLE_INFO[1]
         table_name = info["name"]
         table_param = info["param"]
@@ -34,16 +42,18 @@ class FeedParamDao(Dao):
     def get_urls(self):
         info = FeedParamDao.TABLE_INFO[0]
         table_name = info["name"]
+        param = info["param"]
         with self._con.cursor() as cur:
-            cur.execute(f"SELECT * FROM {table_name};")
+            cur.execute(f"SELECT {param} FROM {table_name};")
             rtn = cur.fetchall()
         return rtn
 
     def get_keywords(self):
         info = FeedParamDao.TABLE_INFO[1]
         table_name = info["name"]
+        param = info["param"]
         with self._con.cursor() as cur:
-            cur.execute(f"SELECT * FROM {table_name};")
+            cur.execute(f"SELECT {param} FROM {table_name};")
             rtn = cur.fetchall()
         return rtn
 
