@@ -1,15 +1,17 @@
 import unittest
 from bot.log_dao import LogDao
+from bot.feed_param_dao import FeedParamDao
 
 class TestLogDao(unittest.TestCase):
 
     user = "Alice"
+    url = "https://gigazine.net/index.php?/news/rss_2.0/"
 
     def setUp(self):
         self.dao = LogDao()
 
     def test_insert_add_action(self):
-        self.dao.insert_add_action(self.user)
+        self.dao.insert_add_action(self.user, self.url, FeedParamDao.TABLE_INFO[0]["name"])
         logs = self.dao.get_logs()
         for log in logs:
             self.assertTrue(self.user in log)
@@ -17,15 +19,15 @@ class TestLogDao(unittest.TestCase):
             self.assertTrue("0" in log)
 
     def test_insert_delete_action(self):
-        self.dao.insert_delete_action(self.user, 10)
+        self.dao.insert_delete_action(self.user, self.url, FeedParamDao.TABLE_INFO[0]["name"])
         logs = self.dao.get_logs()
         for log in logs:
             self.assertTrue(self.user in log)
             self.assertTrue(LogDao.ACTION[1] in log)
-            self.assertTrue("10" in log)
+            self.assertTrue("0" in log)
 
     def test_insert_list_action(self):
-        self.dao.insert_list_action(self.user)
+        self.dao.insert_list_action(self.user, FeedParamDao.TABLE_INFO[0]["name"])
         logs = self.dao.get_logs()
         for log in logs:
             self.assertTrue(self.user in log)

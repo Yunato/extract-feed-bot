@@ -17,19 +17,21 @@ class LogDao(Dao):
         return super()._get_count(table_name)
 
     def __insert_action(self, user, action, count):
+        keys = list(LogDao.TABLE_INFO.keys())
+        param = LogDao.TABLE_INFO[keys[1]]
+        for index in range(len(keys) - 2):
+            param += (", " + LogDao.TABLE_INFO[keys[index + 2]])
         with self._con.cursor() as cur:
-            cur.execute(f"INSERT INTO {LogDao.TABLE_INFO['name']} (time, who, action, count) VALUES (%s, %s, %s, %s);",
+            cur.execute(f"INSERT INTO {LogDao.TABLE_INFO['name']} ({param}) VALUES (%s, %s, %s, %s);",
                         (datetime.datetime.now(), user, action, count))
 
-    def insert_add_action(self, user):
+    def insert_add_action(self, user, content, dest):
         self.__insert_action(user, LogDao.ACTION[0], 0)
 
-    def insert_delete_action(self, user, count):
-        if count < 0:
-            raise ValueError("Second argument must be larger than 0.")
-        self.__insert_action(user, LogDao.ACTION[1], count)
+    def insert_delete_action(self, user, content, src):
+        self.__insert_action(user, LogDao.ACTION[1], 0)
 
-    def insert_list_action(self, user):
+    def insert_list_action(self, user, src):
         self.__insert_action(user, LogDao.ACTION[2], 0)
 
     def insert_fetch_action(self, count):
