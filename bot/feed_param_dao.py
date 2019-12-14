@@ -21,23 +21,25 @@ class FeedParamDao(Dao):
         urls = self.get_urls()
         for saved_url in urls:
             if (url in saved_url):
-                return
+                return False
         info = FeedParamDao.TABLE_INFO[0]
         table_name = info["name"]
         table_param = info["param"]
         with self._con.cursor() as cur:
             cur.execute(f"INSERT INTO {table_name} ({table_param}) VALUES (%s);", (url,))
+        return True
 
     def add_keyword(self, keyword):
         keywords = self.get_keywords()
         for saved_keyword in keywords:
             if (keyword in saved_keyword):
-                return
+                return False
         info = FeedParamDao.TABLE_INFO[1]
         table_name = info["name"]
         table_param = info["param"]
         with self._con.cursor() as cur:
             cur.execute(f"INSERT INTO {table_name} ({table_param}) VALUES (%s);", (keyword,))
+        return True
 
     def get_urls(self):
         info = FeedParamDao.TABLE_INFO[0]
