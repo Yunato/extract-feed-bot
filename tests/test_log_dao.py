@@ -16,7 +16,6 @@ class TestLogDao(unittest.TestCase):
         self.dao.insert_add_action(True, self.user1, self.url1, FeedParamDao.TABLE_INFO[0]["name"])
         self.dao.insert_add_action(False, self.user2, self.url2, FeedParamDao.TABLE_INFO[0]["name"])
         logs = self.dao.get_logs()
-        print(logs)
         self.assertTrue(self.user1 in logs[0][2])
         self.assertTrue(LogDao.ACTION[0] in logs[0][3])
         self.assertTrue("Successful" in logs[0][4])
@@ -28,7 +27,6 @@ class TestLogDao(unittest.TestCase):
         self.dao.insert_delete_action(True, self.user1, self.url1, FeedParamDao.TABLE_INFO[0]["name"])
         self.dao.insert_delete_action(False, self.user2, self.url2, FeedParamDao.TABLE_INFO[0]["name"])
         logs = self.dao.get_logs()
-        print(logs)
         self.assertTrue(self.user1 in logs[0][2])
         self.assertTrue(LogDao.ACTION[1] in logs[0][3])
         self.assertTrue("Successful" in logs[0][4])
@@ -39,7 +37,6 @@ class TestLogDao(unittest.TestCase):
     def test_insert_list_action(self):
         self.dao.insert_list_action(self.user1, FeedParamDao.TABLE_INFO[0]["name"])
         logs = self.dao.get_logs()
-        print(logs)
         self.assertTrue(self.user1 in logs[0][2])
         self.assertTrue(LogDao.ACTION[2] in logs[0][3])
         self.assertTrue("Successful" in logs[0][4])
@@ -47,7 +44,6 @@ class TestLogDao(unittest.TestCase):
     def test_insert_fetch_action(self):
         self.dao.insert_fetch_action(10)
         logs = self.dao.get_logs()
-        print(logs)
         self.assertTrue("Bot" in logs[0][2])
         self.assertTrue(LogDao.ACTION[3] in logs[0][3])
         self.assertTrue("Successful" in logs[0][4])
