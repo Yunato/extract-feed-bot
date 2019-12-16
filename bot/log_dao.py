@@ -35,6 +35,7 @@ class LogDao(Dao):
         msg = "Successful " if successful else "Failed "
         msg += f"to delete {content} from {src}"
         self.__insert_action(user, LogDao.ACTION[1], msg)
+        return msg
 
     def insert_list_action(self, user, src):
         msg = f"Successful to get from {src}"

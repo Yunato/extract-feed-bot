@@ -47,7 +47,10 @@ class FeedParamDao(Dao):
         param = info["param"]
         with self._con.cursor() as cur:
             cur.execute(f"SELECT {param} FROM {table_name};")
-            rtn = cur.fetchall()
+            urls = cur.fetchall()
+        rtn = []
+        for url in urls:
+            rtn.append(url[0])
         return rtn
 
     def get_keywords(self):
@@ -56,7 +59,10 @@ class FeedParamDao(Dao):
         param = info["param"]
         with self._con.cursor() as cur:
             cur.execute(f"SELECT {param} FROM {table_name};")
-            rtn = cur.fetchall()
+            keywords = cur.fetchall()
+        rtn = []
+        for keyword in keywords:
+            rtn.append(keyword[0])
         return rtn
 
     # Called from delete_url_with_param, delete_keyword_with_param
