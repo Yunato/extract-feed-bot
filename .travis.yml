@@ -1,23 +1,17 @@
 language: python
-
 python:
-  - '3.7'
-
+- '3.7'
 services: postgresql
-
 env:
   global:
-    - DATABASE_URL=postgresql://postgres@localhost/travis_ci_test
-
+  - DATABASE_URL=postgresql://postgres@localhost/travis_ci_test
+  - secure: wMAqgPWGoSUexItnI7XHaFoIWBxOoU5QiY7H2T6EgGPEsC2EnMXjXaVrozavH9z8nFEFhjGfj/xHsPFTHNE0qt4KfgZzwhIUWYJvWEjmOR+1U2Nw99cIEAXf/uL9cPZ3qdf8JAOT/SXcNMwoVcxdZKF3zyMUCYbw6BZBdefiPb8QLN9l0P3J+Ajkx79Kpv3PlXdNAappUoPG7BurJ/ucI5fAcNZd2LDj9cTs0tPy8YmXZCxTxrSDdl3O/Q45hWH2Nj1GXgnGcD2TrOhSLrikN+BWmRMOLh7WVAHlM13lcrp0GadS6qw6WL0fdlP/NUARUXFvLEkYzPGbrZfmkTTgnrQUpEF+sCQcByRMlUq7UCrC1cehV8lJ0ej0C11HEZM2x3sv57x9aFJzHjQXy4orFa8wnSq/Vf5nnSPJSXIx1mkSn+ztwRctNzLAHod41zx1D2+tNYMVQUSGI+SAZIKtZ9oOU4nk/YldIE/T3Ynb6tI1/gv34+Rhuu4MQv3noqD0Nd+xZ2TF11snD9J9AAuo3KOt+YgUf6v6EeclidhfHtkQFfHjZXXh7P7yFirPYE7toYRmGPCUA0OGLkIiQeki7l/0qo2R0lzkN/VW9z3iurRQsXiMIkMxiI0lRDjHqGyXXvkODqmlBTGnoWWVuBSZ1vXhqXxlg0CxSKUK0YvXGkQ=
 install:
-  - pip install -r requirements.txt
-
+- pip install -r requirements.txt
 before_script:
-  - psql -c 'create database travis_ci_test;' -U postgres
-
+- psql -c 'create database travis_ci_test;' -U postgres
 script:
-  - python -m unittest discover
-
+- python -m unittest discover
 deploy:
   provider: heroku
   api_key:
