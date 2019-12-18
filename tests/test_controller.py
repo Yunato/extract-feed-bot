@@ -1,6 +1,5 @@
 import unittest
 from bot.controller import Controller
-from bot.run import get_feeds
 
 class TestController(unittest.TestCase):
 
