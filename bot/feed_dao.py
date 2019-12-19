@@ -84,3 +84,4 @@ class FeedParamDao(Dao):
     def delete_keyword_with_index(self, index):
         return super()._delete(FeedParamDao.TABLE_INFO[1]["name"], index)
 
+
