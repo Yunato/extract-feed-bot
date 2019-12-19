@@ -1,7 +1,6 @@
 import feedparser
 import pytz
 from datetime import datetime, date, timedelta
-from bot.feed_param_dao import FeedParamDao
 from slackbot.bot import Bot
 from bot.feed import Feed
 
