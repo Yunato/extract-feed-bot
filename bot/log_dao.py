@@ -11,8 +11,8 @@ class LogDao(Dao):
     def __init__(self):	
         super().__init__(LogDao.TABLE_INFO)
 
-    def get_count(self, table_name):
-        return super()._get_count(table_name)
+    def get_count(self):
+        return super()._get_count(LogDao.TABLE_INFO["name"])
 
     def __insert_action(self, user, action, msg):
         keys = list(LogDao.TABLE_INFO.keys())
