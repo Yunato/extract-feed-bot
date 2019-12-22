@@ -1,87 +1,50 @@
 import psycopg2
+import pytz
+from datetime import datetime
 
 from bot.dao import Dao
+from bot.feed import Feed
 
-class FeedParamDao(Dao):
+class FeedDao(Dao):
 
-    TABLE_INFO = [
-            {"name": "urls",        "param":  "url"}, 
-            {"name": "keywords",    "param":  "keyword"} 
-            ] 
+    TABLE_INFO = {"name": "feed", "param1":  "title", "param2": "link", "param3": "source", "param4": "time", "param5": "summary", "param6": "category"}
         
     def __init__(self):	
-        super().__init__(FeedParamDao.TABLE_INFO)
+        super().__init__(FeedDao.TABLE_INFO)
 
-    def get_count(self, table_name):
-        return super()._get_count(table_name)
+    def get_count(self):
+        return super()._get_count(FeedDao.TABLE_INFO["name"])
 
-    def add_url(self, url):
-        urls = self.get_urls()
-        for saved_url in urls:
-            if (url in saved_url):
-                return False
-        info = FeedParamDao.TABLE_INFO[0]
-        table_name = info["name"]
-        table_param = info["param"]
+    def add_feed(self, feed):
+        keys = list(FeedDao.TABLE_INFO.keys())
+        param = FeedDao.TABLE_INFO[keys[1]]
+        for index in range(len(keys) - 2):
+            param += (", " + FeedDao.TABLE_INFO[keys[index + 2]])
         with self._con.cursor() as cur:
-            cur.execute(f"INSERT INTO {table_name} ({table_param}) VALUES (%s);", (url,))
-        return True
+            cur.execute(f"INSERT INTO {FeedDao.TABLE_INFO['name']} ({param}) VALUES (%s, %s, %s, %s, %s, %s);",
+                        (feed.title, feed.link, feed.source, feed.time, feed.summary, feed.category))
 
-    def add_keyword(self, keyword):
-        keywords = self.get_keywords()
-        for saved_keyword in keywords:
-            if (keyword in saved_keyword):
-                return False
-        info = FeedParamDao.TABLE_INFO[1]
-        table_name = info["name"]
-        table_param = info["param"]
+    def get_feeds(self):
         with self._con.cursor() as cur:
-            cur.execute(f"INSERT INTO {table_name} ({table_param}) VALUES (%s);", (keyword,))
-        return True
-
-    def get_urls(self):
-        info = FeedParamDao.TABLE_INFO[0]
-        table_name = info["name"]
-        param = info["param"]
-        with self._con.cursor() as cur:
-            cur.execute(f"SELECT {param} FROM {table_name};")
-            urls = cur.fetchall()
+            cur.execute(f"SELECT * FROM {FeedDao.TABLE_INFO['name']};")
+            feeds = cur.fetchall()
         rtn = []
-        for url in urls:
-            rtn.append(url[0])
+        for feed in feeds:
+            title = feed[1]
+            link = feed[2]
+            source = feed[3]
+            time = datetime.strptime(feed[4], '%Y/%m/%d %H:%M:%S')
+            summary = feed[5]
+            category = feed[6]
+            rtn.append(Feed(title, link, source, time, summary, category))
         return rtn
 
-    def get_keywords(self):
-        info = FeedParamDao.TABLE_INFO[1]
-        table_name = info["name"]
-        param = info["param"]
+    def delete_all(self):
         with self._con.cursor() as cur:
-            cur.execute(f"SELECT {param} FROM {table_name};")
-            keywords = cur.fetchall()
-        rtn = []
-        for keyword in keywords:
-            rtn.append(keyword[0])
-        return rtn
+            cur.execute(f"DELETE FROM {FeedDao.TABLE_INFO['name']}")
 
-    # Called from delete_url_with_param, delete_keyword_with_param
-    def _delete_with_param(self, param, params, func):
-        for index in range(len(params)):
-            if (param in params[index]):
-                return func(index)
-        return False
-
-    def delete_url_with_param(self, url):
-        urls = self.get_urls()
-        return self._delete_with_param(url, urls, self.delete_url_with_index)
-
-    def delete_keyword_with_param(self, keyword):
-        keywords = self.get_keywords()
-        return self._delete_with_param(keyword, keywords, self.delete_keyword_with_index)
-
-    def delete_url_with_index(self, index):
-        return super()._delete(FeedParamDao.TABLE_INFO[0]["name"], index)
-
-    def delete_keyword_with_index(self, index):
-        return super()._delete(FeedParamDao.TABLE_INFO[1]["name"], index)
-
-
+    def get_latest_time(self):
+        with self._con.cursor() as cur:
+            cur.execute(f"SELECT {FeedDao.TABLE_INFO['param4']} FROM {FeedDao.TABLE_INFO['name']} ORDER BY id DESC LIMIT 1")
+            time = datetime.strptime(cur.fetchall()[0][0], '%Y/%m/%d %H:%M:%S').replace(tzinfo=pytz.timezone("Asia/Tokyo"))
+        return time
