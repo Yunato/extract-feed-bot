@@ -43,8 +43,8 @@ class FeedDao(Dao):
         with self._con.cursor() as cur:
             cur.execute(f"DELETE FROM {FeedDao.TABLE_INFO['name']}")
 
-    def get_latest_time(self):
+    def get_latest_time(self, src):
         with self._con.cursor() as cur:
-            cur.execute(f"SELECT {FeedDao.TABLE_INFO['param4']} FROM {FeedDao.TABLE_INFO['name']} ORDER BY id DESC LIMIT 1")
+            cur.execute(f"SELECT {FeedDao.TABLE_INFO['param4']} FROM {FeedDao.TABLE_INFO['name']} WHERE {FeedDao.TABLE_INFO['param3']}=\"{src}\" ORDER BY id DESC LIMIT 1;")
             time = datetime.strptime(cur.fetchall()[0][0], '%Y/%m/%d %H:%M:%S').replace(tzinfo=pytz.timezone("Asia/Tokyo"))
         return time

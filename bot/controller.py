@@ -1,9 +1,12 @@
+from bot.feed import Feed
+from bot.feed_dao import FeedDao
 from bot.feed_param_dao import FeedParamDao
 from bot.log_dao import LogDao
 
 class Controller:
         
     def __init__(self):	
+        self.feed_dao = FeedDao()
         self.feed_param_dao = FeedParamDao()
         self.log_dao = LogDao()
 
@@ -66,8 +69,20 @@ class Controller:
             msg += f"{log[1]}: [{log[3]}] {log[4]} by {log[2]}\n"
         return msg
 
-    # def fetch_feed():
-        # size = 
-        # self.log_dao.insert_fetch_action(size)
+    def fetch_feed(self):
+        new_feeds = []
+        urls = self.feed_param_dao.get_urls()
+        for url in urls:
+            feeds = Feed.fetch_feed(url)
+            if len(feeds) == 0:
+                continue
+            latest_time = self.feed_dao.get_latest_dao(feeds[0].source)
+            for feed in feeds:
+                if feed.time <= latest_time:
+                    feeds.remove(feed)
+            new_feeds.extend(feeds)
+        for feed in new_feeds:
+            self.feed_dao.add_feed(feed)
+        self.log_dao.insert_fetch_action(len(new_feeds))
 
 
