@@ -21,8 +21,9 @@ def get_feeds(rss_url):
         link = d.entries[entry].link
         time = datetime(*d.entries[entry].updated_parsed[:6], tzinfo=UTC).astimezone(LOCAL_TZ)
         summary = d.entries[entry].summary
-        category = d.entries[entry].category
-        print(Feed(title, link, source, time, summary, category))
+        # category = d.entries[entry].category
+        # print(Feed(title, link, source, time, summary, category))
+        print(Feed(title, link, source, time, summary))
         print('----')
     return d.entries
                     

@@ -88,10 +88,7 @@ class TestController(unittest.TestCase):
     def test_fetch_feed(self):
         msg = self.controller.add_url(self.user1, self.url1)
         msg = self.controller.add_url(self.user2, self.url2)
-        self.controller.fetch_feed()
-        dao = FeedDao()
-        self.assertFalse(dao.get_count() == 0)
-
+        self.assertFalse(self.controller.fetch_feed() == 0)
 
 if __name__ == '__main__':
     unittest.main()
