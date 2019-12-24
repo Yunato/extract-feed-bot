@@ -1,3 +1,6 @@
+import json
+import math
+import random
 from datetime import datetime
 from bot.feed import Feed
 from bot.feed_dao import FeedDao
@@ -7,6 +10,7 @@ from bot.log_dao import LogDao
 class Controller:
         
     def __init__(self):	
+        self.feed_dao = FeedDao()
         self.feed_param_dao = FeedParamDao()
         self.log_dao = LogDao()
 
@@ -70,20 +74,38 @@ class Controller:
         return msg
 
     def fetch_feed(self):
-        feed_dao = FeedDao()
         new_feeds = []
         urls = self.feed_param_dao.get_urls()
         for url in urls:
             feeds = Feed.fetch_feed(url)
             if len(feeds) == 0:
                 continue
-            latest_time = feed_dao.get_latest_time(feeds[0].source)
+            latest_time = self.feed_dao.get_latest_time(feeds[0].source)
             for feed in feeds:
                 time = datetime.strptime(feed.time, '%Y/%m/%d %H:%M:%S')
                 if time <= latest_time:
                     feeds.remove(feed)
             new_feeds.extend(feeds)
         for feed in new_feeds:
-            feed_dao.add_feed(feed)
+            self.feed_dao.add_feed(feed)
         self.log_dao.insert_fetch_action(len(new_feeds))
-        return feed_dao.get_count()
+        return self.feed_dao.get_count()
+
+    def create_message(self):
+        message = {}
+        message['attachments'] = []
+        attachments = []
+        for feed in self.feed_dao.get_feeds():
+            attachment = {}
+            num = 0
+            for c in feed.source:
+                num += ord(c)
+            random.seed(num)
+            attachment['title'] = feed.title
+            attachment['title_link'] = feed.link
+            attachment['text'] = feed.get_message()
+            attachment['color'] = "#" + hex(math.floor(random.random() * 16777215))
+            attachments.append(attachment)
+        message['attachments'].extend(attachments)
+        return json.dumps(message).encode()
+
