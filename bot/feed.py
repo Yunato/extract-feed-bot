@@ -35,3 +35,6 @@ class Feed:
             summary = d.entries[entry].summary
             feeds.append(Feed(title, link, source, time, summary))
         return feeds
+
+    def get_message(self):
+        return '{} / {}\n{}'.format(self.source, self.time, self.summary)
