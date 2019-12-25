@@ -1,4 +1,5 @@
 import json
+import pytz
 import math
 import random
 from datetime import datetime
@@ -82,7 +83,7 @@ class Controller:
                 continue
             latest_time = self.feed_dao.get_latest_time(feeds[0].source)
             for feed in feeds:
-                time = datetime.strptime(feed.time, '%Y/%m/%d %H:%M:%S')
+                time = datetime.strptime(feed.time, '%Y/%m/%d %H:%M:%S').replace(tzinfo=pytz.timezone("Asia/Tokyo"))
                 if time <= latest_time:
                     feeds.remove(feed)
             new_feeds.extend(feeds)
@@ -106,6 +107,12 @@ class Controller:
             attachment['text'] = feed.get_message()
             attachment['color'] = "#" + hex(math.floor(random.random() * 16777215))
             attachments.append(attachment)
+        if(len(attachments) == 0):
+            attachment = {}
+            attachment['title'] = 'No feed for today.'
+            attachments.append(attachment)
         message['attachments'].extend(attachments)
         return json.dumps(message).encode()
+
+
 

@@ -54,5 +54,5 @@ class FeedDao(Dao):
             if(len(times) != 0):
                 time = datetime.strptime(times[0][0], '%Y/%m/%d %H:%M:%S').replace(tzinfo=pytz.timezone("Asia/Tokyo"))
             else:
-                time = datetime.min
+                time = datetime.min.replace(tzinfo=pytz.timezone("Asia/Tokyo"))
         return time
