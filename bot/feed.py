@@ -1,5 +1,6 @@
 import feedparser
 import pytz
+import re
 from datetime import datetime
 
 class Feed:
@@ -21,18 +22,19 @@ class Feed:
         if not rss_url:
             raise ValueError("The argument must be not empty")
 
-        LOCAL_TZ = pytz.timezone("Asia/Tokyo")
-        UTC = pytz.timezone("UTC")
-
         d = feedparser.parse(rss_url)
         source = d['feed']['title']
 
+        LOCAL_TZ = pytz.timezone("Asia/Tokyo")
+        UTC = pytz.timezone("UTC")
+        p = re.compile(r"<[^>]*?>")
+
         feeds = []
-        for entry in range(len(d.entries)):
-            title = d.entries[entry].title
-            link = d.entries[entry].link
-            time = datetime(*d.entries[entry].updated_parsed[:6], tzinfo=UTC).astimezone(LOCAL_TZ)
-            summary = d.entries[entry].summary
+        for index in range(len(d.entries)):
+            title = d.entries[index].title
+            link = d.entries[index].link
+            time = datetime(*d.entries[index].updated_parsed[:6], tzinfo=UTC).astimezone(LOCAL_TZ)
+            summary = p.sub("", d.entries[index].summary)
             feeds.append(Feed(title, link, source, time, summary))
         return feeds
 
