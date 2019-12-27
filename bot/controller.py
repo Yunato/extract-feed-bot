@@ -77,6 +77,7 @@ class Controller:
     def fetch_feed(self):
         new_feeds = []
         urls = self.feed_param_dao.get_urls()
+        keywords = self.feed_param_dao.get_keywords()
         for url in urls:
             feeds = Feed.fetch_feed(url)
             if len(feeds) == 0:
@@ -85,6 +86,12 @@ class Controller:
             for feed in feeds:
                 time = datetime.strptime(feed.time, '%Y/%m/%d %H:%M:%S').replace(tzinfo=pytz.timezone("Asia/Tokyo"))
                 if time <= latest_time:
+                    feeds.remove(feed)
+                isIncluded = False
+                for keyword in keywords:
+                    if keyword in feed.summary:
+                        isIncluded = True
+                if not isIncluded:
                     feeds.remove(feed)
             new_feeds.extend(feeds)
         for feed in new_feeds:
