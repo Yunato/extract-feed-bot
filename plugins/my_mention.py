@@ -22,7 +22,7 @@ def exec_command_with_one_arg(message, args):
     len_arg = len(args.split())
     if len_arg > 0:
         command = args.split()[0]
-        user = message.body['user']
+        user = message.channel._client.users[message.body['user']][u'name']
         if len(args.split()) == 2:
             arg = args.split()[1]
             if command.lower() == 'get':
