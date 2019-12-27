@@ -21,7 +21,7 @@ class LogDao(Dao):
             param += (", " + LogDao.TABLE_INFO[keys[index + 2]])
         with self._con.cursor() as cur:
             cur.execute(f"INSERT INTO {LogDao.TABLE_INFO['name']} ({param}) VALUES (%s, %s, %s, %s);",
-                        (datetime.datetime.now(), user, action, msg))
+                    (datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"), user, action, msg))
 
     def insert_add_action(self, successful, user, content, dest):
         msg = "Successful " if successful else "Failed "
