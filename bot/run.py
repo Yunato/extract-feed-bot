@@ -1,8 +1,7 @@
-import os
-import urllib.request
 import sys
 from slackbot.bot import Bot
 from bot.controller import Controller
+import plugins.my_mention
 
 def main():         
     args = sys.argv
@@ -14,13 +13,6 @@ def main():
     elif args[1] == "send":
         send()
 
-def fetch():
-    Controller().fetch_feed()
-
-def send():
-    controller = Controller()
-    req = urllib.request.Request(os.environ.get('WEBHOOK_URL'), controller.create_message())
-    urllib.request.urlopen(req)
 
 if __name__ == "__main__":
     main()
