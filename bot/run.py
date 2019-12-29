@@ -1,9 +1,10 @@
 import sys
 from slackbot.bot import Bot
 from bot.controller import Controller
-import plugins.my_mention
+from plugins.my_mention import *
 
-def main():         
+
+def main():
     args = sys.argv
     if args[1] == "bot":
         bot = Bot()
