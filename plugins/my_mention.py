@@ -8,7 +8,7 @@ from bot.controller import Controller
 controller = Controller()
 
 def fetch():	
-    message.send('get {} feeds'.format(controller.fetch_feed()))	
+    controller.fetch_feed()
 
 def send():	
     req = urllib.request.Request(os.environ.get('WEBHOOK_URL'), controller.create_message())	
@@ -58,8 +58,8 @@ def exec_command_with_one_arg(message, args):
                         send_message(message, 'RESULT', controller.delete_keyword_with_param(user, arg2))
                         return
                 return
-            elif command.lower() == 'log':
-                if arg2.isdecimal():
+            elif command.lower() == 'get':
+                if arg1.lower() == 'log' and arg2.isdecimal():
                     send_message(message, 'LOG', controller.get_logs(int(arg2)))
                     return
     message.send('Invalid command')
