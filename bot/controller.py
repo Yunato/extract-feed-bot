@@ -88,7 +88,9 @@ class Controller:
                 time = datetime.strptime(feed.time, '%Y/%m/%d %H:%M:%S').replace(tzinfo=pytz.timezone("Asia/Tokyo"))
                 if time <= latest_time:
                     continue
-                isIncluded = False
+                if len(keywords) == 0:
+                    add_feeds.append(feed)
+                    continue
                 for keyword in keywords:
                     if keyword in feed.title or keyword in feed.summary:
                         add_feeds.append(feed)
