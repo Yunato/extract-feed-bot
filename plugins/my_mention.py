@@ -4,9 +4,9 @@ import urllib.request
 from slackbot.bot import listen_to
 from slackbot.bot import respond_to
 from bot.controller import Controller
-    
-controller = Controller()
 
+controller = Controller()
+    
 def fetch():	
     controller.fetch_feed()
 

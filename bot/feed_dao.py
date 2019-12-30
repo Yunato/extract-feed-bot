@@ -12,6 +12,7 @@ class FeedDao(Dao):
         
     def __init__(self):	
         super().__init__(FeedDao.TABLE_INFO)
+        print(self._con)
 
     def get_count(self):
         return super()._get_count(FeedDao.TABLE_INFO["name"])
