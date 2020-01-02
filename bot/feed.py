@@ -21,10 +21,8 @@ class Feed:
     def fetch_feed(rss_url):
         if not rss_url:
             raise ValueError("The argument must be not empty")
-
         d = feedparser.parse(rss_url)
         source = d['feed']['title']
-
         LOCAL_TZ = pytz.timezone("Asia/Tokyo")
         UTC = pytz.timezone("UTC")
         p = re.compile(r"<[^>]*?>")

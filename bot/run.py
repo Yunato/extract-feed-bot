@@ -13,7 +13,7 @@ def run():
 def fetcher():
     JST = datetime.timezone(datetime.timedelta(hours=+9), 'JST')
     now = datetime.datetime.now(JST)
-    std = datetime.datetime(now.year, now.month, now.day, (now.hour/2 + 1) * 2, now.minute, now.second, tzinfo=JST)
+    std = datetime.datetime(now.year, now.month, now.day, (int(now.hour/2) + 1) * 2, 0, 0, tzinfo=JST)
     td = datetime.timedelta(hours=2)
     while True:
         dt_now = datetime.datetime.now(JST)

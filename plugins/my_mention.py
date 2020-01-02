@@ -37,7 +37,8 @@ def exec_command_with_one_arg(message, args):
             arg2 = args.split()[2]
             if command.lower() == 'add':
                 if 'url' in arg1.lower():
-                    send_message(message, 'RESULT', controller.add_url(user, arg2))
+                    url = (arg2[1:])[:-1]
+                    send_message(message, 'RESULT', controller.add_url(user, url))
                     return
                 elif 'keyword' in arg1.lower():
                     send_message(message, 'RESULT', controller.add_keyword(user, arg2))
@@ -48,7 +49,8 @@ def exec_command_with_one_arg(message, args):
                         send_message(message, 'RESULT', controller.delete_url_with_index(user, int(arg2)))
                         return
                     else:
-                        send_message(message, 'RESULT', controller.delete_url_with_param(user, arg2))
+                        url = (arg2[1:])[:-1]
+                        send_message(message, 'RESULT', controller.delete_url_with_param(user, url))
                         return
                 elif 'keyword' in arg1.lower():
                     if arg2.isdecimal():
