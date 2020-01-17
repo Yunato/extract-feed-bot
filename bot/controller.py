@@ -120,6 +120,8 @@ class Controller:
             attachment = {}
             attachment['title'] = 'No feed for today.'
             attachments.append(attachment)
+        else:
+            self.feed_dao.delete_all()
         message['attachments'].extend(attachments)
         return json.dumps(message).encode()
 

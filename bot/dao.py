@@ -5,6 +5,7 @@ class Dao:
         
     def __init__(self, table_info):	
         self._con = self.__get_connection()	
+        self._con.autocommit = True
         if type(table_info) is not list and type(table_info) is not dict:
             raise TypeError(f"The argument's type must be list or dict: {type(table_info)}")
         if type(table_info) is list and type(table_info[0]) is not dict:
